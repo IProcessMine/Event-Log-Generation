@@ -1,0 +1,150 @@
+<!-- settings_confirm.html -->
+<div class="container-fluid">
+    <form id="configSettingsForm" hx-post="{{ url_for('main.settings_config_form') }}" hx-target="body">
+        <div class="mb-3">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="getFromDefaults" name="get_from_defaults">
+                <label class="form-check-label" for="getFromDefaults">
+                    Get From Defaults
+                </label>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="defaultOptions" class="form-label">Defaults List</label>
+            <select class="form-select" id="defaultOptions" name="default_options">
+                {% for option in list_configs() %}
+                    <option value="{{ option }}">{{ option }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="button" class="btn btn-primary" id="addNewProcessBtn">Add New Process</button>
+        <table class="table mt-3" id="processesTable">
+            <thead>
+                <tr>
+                    <th scope="col">Process Name</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Dynamic content will be loaded here -->
+            </tbody>
+        </table>
+        <div id="processDetails" style="display:none;">
+            <nav class="nav nav-tabs">
+                <a class="nav-link active" href="#process" data-bs-toggle="tab">Process</a>
+                <a class="nav-link" href="#activities" data-bs-toggle="tab">Activities</a>
+                <a class="nav-link" href="#traces" data-bs-toggle="tab">Traces</a>
+                <a class="nav-link" href="#eventAttributes" data-bs-toggle="tab">Event Attributes</a>
+                <a class="nav-link" href="#caseAttributes" data-bs-toggle="tab">Case Attributes</a>
+                <a class="nav-link" href="#objectTypes" data-bs-toggle="tab">Object Types</a>
+            </nav>
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="process">
+                    <div class="mb-3">
+                        <label for="processName" class="form-label">Process Name</label>
+                        <input type="text" class="form-control" id="processName" name="process_name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="processDescription" class="form-label">Process Description</label>
+                        <textarea class="form-control" id="processDescription" name="process_description"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="processID" class="form-label">Process ID</label>
+                        <input type="number" class="form-control" id="processID" name="process_id">
+                    </div>
+                    <div class="mb-3">
+                        <label for="caseID" class="form-label">Case ID</label>
+                        <input type="number" class="form-control" id="caseID" name="case_id">
+                    </div>
+                    <div class="mb-3">
+                        <label for="startDate" class="form-label">Start Date</label>
+                        <input type="date" class="form-control" id="startDate" name="start_date">
+                    </div>
+                    <div class="mb-3">
+                        <label for="endDate" class="form-label">End Date</label>
+                        <input type="date" class="form-control" id="endDate" name="end_date">
+                    </div>
+                    <div class="mb-3">
+                        <label for="numCases" class="form-label">Number of Cases</label>
+                        <input type="number" class="form-control" id="numCases" name="num_cases">
+                    </div>
+                    <!-- Add other fields with tooltips here -->
+                </div>
+                <div class="tab-pane fade" id="activities">
+                    <button type="button" class="btn btn-primary" id="addNewActivityBtn">Add New Activity</button>
+                    <table class="table mt-3" id="activitiesTable">
+                        <thead>
+                            <tr>
+                                <th scope="col">Activity Name</th>
+                                <th scope="col">Trace</th>
+                                <th scope="col">Order</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Dynamic content will be loaded here -->
+                        </tbody>
+                    </table>
+                    <div id="activityDetails" style="display:none;">
+                        <nav class="nav nav-tabs">
+                            <a class="nav-link active" href="#activity" data-bs-toggle="tab">Activity</a>
+                            <a class="nav-link" href="#activityAttributes" data-bs-toggle="tab">Activity Attributes</a>
+                            <a class="nav-link" href="#transactionTypes" data-bs-toggle="tab">Transaction Types</a>
+                        </nav>
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="activity">
+                                <div class="mb-3">
+                                    <label for="activityName" class="form-label">Activity Name</label>
+                                    <input type="text" class="form-control" id="activityName" name="activity_name">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="activityTrace" class="form-label">Trace</label>
+                                    <input type="text" class="form-control" id="activityTrace" name="trace">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="activityOrder" class="form-label">Order</label>
+                                    <input type="number" class="form-control" id="activityOrder" name="order">
+                                </div>
+                                <!-- Add other fields with tooltips here -->
+                            </div>
+                            <div class="tab-pane fade" id="activityAttributes">
+                                <button type="button" class="btn btn-primary" id="addNewActivityAttributeBtn">Add New Attribute</button>
+                                <table class="table mt-3" id="activityAttributesTable">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Attribute Name</th>
+                                            <th scope="col">Attribute Value</th>
+                                            <th scope="col">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Dynamic content will be loaded here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane fade" id="transactionTypes">
+                                <button type="button" class="btn btn-primary" id="addNewTransactionTypeBtn">Add New Transaction Type</button>
+                                <table class="table mt-3" id="transactionTypesTable">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Transaction Type</th>
+                                            <th scope="col">Custom Type Name</th>
+                                            <th scope="col">Order</th>
+                                            <th scope="col">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Dynamic content will be loaded here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Add content for Traces, Event Attributes, Case Attributes, and Object Types here -->
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+</div>

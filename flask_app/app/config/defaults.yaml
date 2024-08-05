@@ -1,0 +1,50 @@
+# defaults.yaml
+general_defaults:
+  process_id_start: 1
+  case_id_start: 1
+  attribute_definition_id_start: 1
+  case_attribute_id_start: 1
+  activity_id_start: 1
+  activity_instance_id_start: 1
+  event_id_start: 1
+  event_attribute_id_start: 1
+  object_id: 1
+  object_type_id: 1
+
+trace_generation_defaults:
+  additional_trace_patterns_range: [90, 100]
+  replays_range: [1, 5]
+  traces_in_pattern_range: [1, 5]
+
+process_defaults:
+  num_cases: 100
+  case_attributes: []
+  event_attributes: []
+  object_types: []
+  working_days: []
+  working_hours: []
+
+activity_defaults:
+  min_weight: 1
+  max_weight: 4
+  duration_range: [1, 5]
+  duration_uom: 'days'
+  transaction_types: []
+  transaction_duration_range: [1, 4]
+  transaction_duration_uom: "minutes"
+  activity_attributes: []
+  working_days: []
+  working_hours: []
+
+
+attribute_defaults:
+  range: [1, 100]
+  distribution: "uniform"
+  adjustment_type: 'slight_change'
+  generation_level: "case"
+  resource_count: 1
+
+object_type_defaults:
+  range: [1, 4]
+  object_attributes: []
+  activity_qualifiers: []

@@ -1,0 +1,206 @@
+process:
+  process_name: "Purchase to Pay"
+  process_description: "Purchase to Pay process for a retail company"
+  start_date: "2024-01-01"
+  end_date: "2024-12-31"
+  num_cases: 1000
+  traces:
+    - "(req,approve,order,receive,invoice,pay)^300"
+    - "(req,approve,order,receive,pay)^200"
+    - "(req,order,receive,invoice,pay)^150"
+    - "(req,order,receive,pay)^100"
+    - "(req,approve,order,invoice,pay)^250"
+  case_attributes:
+    - name: "RequestID"
+      type: "UUID"
+      distribution: "uniform"
+    - name: "Department"
+      type: "Categorical"
+      categories: ["HR", "IT", "Finance", "Operations"]
+      distribution: "uniform"
+    - name: "Requester"
+      type: "Resource"
+      resource_type: "human"
+      distribution: "normal"
+      range: "1..100"
+  activities:
+    - name: "Request Created"
+      trace: "req"
+      order: 1
+      min_weight: 1
+      max_weight: 2
+      distribution: "uniform"
+      transaction_types:
+        - name: "start"
+          order: 1
+        - name: "complete"
+          order: 2
+      activity_attributes:
+        - name: "RequestedBy"
+          type: "Resource"
+          resource_type: "human"
+          distribution: "normal"
+          range: "1..100"
+    - name: "Request Approved"
+      trace: "approve"
+      order: 2
+      min_weight: 1
+      max_weight: 2
+      distribution: "uniform"
+      transaction_types:
+        - name: "start"
+          order: 2
+        - name: "complete"
+          order: 3
+      activity_attributes:
+        - name: "ApprovedBy"
+          type: "Resource"
+          resource_type: "human"
+          distribution: "normal"
+          range: "1..50"
+    - name: "Order Placed"
+      trace: "order"
+      order: 3
+      min_weight: 1
+      max_weight: 2
+      distribution: "uniform"
+      transaction_types:
+        - name: "start"
+          order: 3
+        - name: "complete"
+          order: 4
+      activity_attributes:
+        - name: "OrderedBy"
+          type: "Resource"
+          resource_type: "human"
+          distribution: "normal"
+          range: "1..50"
+    - name: "Goods Received"
+      trace: "receive"
+      order: 4
+      min_weight: 1
+      max_weight: 3
+      distribution: "normal"
+      transaction_types:
+        - name: "start"
+          order: 4
+        - name: "complete"
+          order: 5
+      activity_attributes:
+        - name: "ReceivedBy"
+          type: "Resource"
+          resource_type: "human"
+          distribution: "normal"
+          range: "1..50"
+    - name: "Invoice Received"
+      trace: "invoice"
+      order: 5
+      min_weight: 1
+      max_weight: 4
+      distribution: "normal"
+      transaction_types:
+        - name: "start"
+          order: 5
+        - name: "complete"
+          order: 6
+      activity_attributes:
+        - name: "InvoicedBy"
+          type: "Resource"
+          resource_type: "human"
+          distribution: "normal"
+          range: "1..30"
+        - name: "Payment Made"
+          trace: "pay"
+          order: 6
+          min_weight: 1
+          max_weight: 4
+          distribution: "normal"
+          transaction_types:
+            - name: "start"
+              order: 6
+            - name: "complete"
+              order: 7
+          activity_attributes:
+            - name: "PaidBy"
+              type: "Resource"
+              resource_type: "human"
+              distribution: "normal"
+              range: "1..30"
+  event_attributes:
+    - name: "Location"
+      type: "Character"
+      distribution: "uniform"
+      generation_level: "event"
+    - name: "Duration"
+      type: "Numeric"
+      distribution: "normal"
+      range: "1..10"
+      generation_level: "event"
+    - name: "Timestamp"
+      type: "Datetime"
+      distribution: "uniform"
+      generation_level: "event"
+    - name: "PersonID"
+      type: "UUID"
+      distribution: "uniform"
+      generation_level: "event"
+    - name: "Department"
+      type: "Categorical"
+      categories: [ "HR", "IT", "Finance", "Operations" ]
+      distribution: "uniform"
+      generation_level: "event"
+    - name: "Role"
+      type: "Categorical"
+      categories: [ "Requester", "Approver", "Orderer", "Receiver", "Invoicer", "Payer" ]
+      distribution: "uniform"
+      generation_level: "event"
+  object_types:
+    - name: "Purchase Order"
+      range: "1..4"
+      object_attributes:
+        - name: "OrderAmount"
+          type: "Numeric"
+          distribution: "normal"
+          range: "100..10000"
+        - name: "OrderDate"
+          type: "Datetime"
+          distribution: "uniform"
+      activity_qualifiers:
+        - name: "Order Created"
+          to_activity: "Order Placed"
+        - name: "Order Received"
+          to_activity: "Goods Received"
+      object_qualifiers:
+        - name: "requested by"
+          to_object: "Person"
+        - name: "approved by"
+          to_object: "Person"
+    - name: "Invoice"
+      range: "1..4"
+      object_attributes:
+        - name: "InvoiceAmount"
+          type: "Numeric"
+          distribution: "attribute"
+          attribute: "OrderAmount"
+        - name: "InvoiceDate"
+          type: "Datetime"
+          distribution: "uniform"
+      activity_qualifiers:
+        - name: "Invoice Sent"
+          to_activity: "Invoice Received"
+      object_qualifiers:
+        - name: "paid by"
+          to_object: "Person"
+    - name: "Payment"
+      range: "1..4"
+      object_attributes:
+        - name: "PaymentAmount"
+          type: "Numeric"
+          distribution: "attribute"
+          attribute: "InvoiceAmount"
+        - name: "PaymentDate"
+          type: "Datetime"
+          distribution: "uniform"
+      activity_qualifiers:
+        - name: "Payment Processed"
+          to_activity: "Payment Made"

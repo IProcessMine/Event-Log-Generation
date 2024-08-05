@@ -1,0 +1,170 @@
+processes:
+  OTC:
+    process_name: "Order to Cash"
+    process_description: "Order to Cash process for a manufacturing company"
+    start_date: "2024-01-01"
+    end_date: "2024-12-31"
+    num_cases: 1000
+    traces: ["(a,b,c,d,e)^300", "(a,b,c,d)^200", "(a,b,c)^150", "(a,b)^100", "(a,d,e)^250"]
+    case_attributes:
+      - name: "CustomerID"
+        type: "Categorical"
+        categories: ["C001", "C002", "C003", "C004"]
+        distribution: "uniform"
+      - name: "OrderValue"
+        type: "Numeric"
+        distribution: "normal"
+        range: "1000..10000"
+      - name: "SalesRep"
+        type: "Resource"
+        resource_type: "human"
+        distribution: "normal"
+        range: "1..50"
+    activities:
+      - name: "Order Received"
+        trace: "a"
+        order: 1
+        min_weight: 1
+        max_weight: 2
+        distribution: "uniform"
+        transaction_types:
+          - name: "start"
+            order: 1
+          - name: "complete"
+            order: 2
+        activity_attributes:
+          - name: "OrderID"
+            type: "UUID"
+            distribution: "uniform"
+          - name: "Received_by"
+            type: "Resource"
+            resource_type: "human"
+            distribution: "normal"
+            range: "1..50"
+      - name: "Order Packed"
+        trace: "b"
+        order: 2
+        min_weight: 1
+        max_weight: 2
+        distribution: "uniform"
+        transaction_types:
+          - name: "start"
+            order: 2
+          - name: "complete"
+            order: 3
+        activity_attributes:
+          - name: "Packed_by"
+            type: "Resource"
+            resource_type: "human"
+            distribution: "normal"
+            range: "1..40"
+      - name: "Order Shipped"
+        trace: "c"
+        order: 3
+        min_weight: 1
+        max_weight: 2
+        distribution: "uniform"
+        transaction_types:
+          - name: "start"
+            order: 3
+          - name: "complete"
+            order: 4
+        activity_attributes:
+          - name: "Shipped_by"
+            type: "Resource"
+            resource_type: "human"
+            distribution: "normal"
+            range: "1..30"
+      - name: "Order Delivered"
+        trace: "d"
+        order: 4
+        min_weight: 1
+        max_weight: 3
+        distribution: "normal"
+        transaction_types:
+          - name: "start"
+            order: 4
+          - name: "complete"
+            order: 5
+        activity_attributes:
+          - name: "Delivered_by"
+            type: "Resource"
+            resource_type: "human"
+            distribution: "normal"
+            range: "1..20"
+      - name: "Invoice Sent"
+        trace: "e"
+        order: 5
+        min_weight: 1
+        max_weight: 4
+        distribution: "normal"
+        transaction_types:
+          - name: "start"
+            order: 5
+          - name: "complete"
+            order: 6
+        activity_attributes:
+          - name: "Invoiced_by"
+            type: "Resource"
+            resource_type: "human"
+            distribution: "normal"
+            range: "1..20"
+    event_attributes:
+      - name: "Location"
+        type: "Character"
+        distribution: "uniform"
+        generation_level: "event"
+      - name: "Duration"
+        type: "Numeric"
+        distribution: "normal"
+        range: "1..10"
+        generation_level: "event"
+      - name: "Timestamp"
+        type: "Datetime"
+        distribution: "uniform"
+        generation_level: "event"
+    object_types:
+      - name: "Order"
+        range: "1..4"
+        object_attributes:
+          - name: "OrderAmount"
+            type: "Numeric"
+            distribution: "normal"
+            range: "1000..10000"
+        activity_qualifiers:
+          - name: "Order Created"
+            to_activity: "Order Received"
+          - name: "Order Delivered"
+            to_activity: "Order Delivered"
+        object_qualifiers:
+          - name: "invoiced by"
+            to_object: "Invoice"
+      - name: "Invoice"
+        range: "1..4"
+        object_attributes:
+          - name: "InvoiceAmount"
+            type: "Numeric"
+            distribution: "attribute"
+            attribute: "OrderAmount"
+          - name: "is_paid"
+            type: "Boolean"
+            distribution: "uniform"
+        activity_qualifiers:
+          - name: "Invoice Sent"
+            to_activity: "Invoice Sent"
+        object_qualifiers:
+          - name: "paid by"
+            to_object: "Payment"
+      - name: "Payment"
+        range: "1..4"
+        object_attributes:
+          - name: "PaymentAmount"
+            type: "Numeric"
+            distribution: "attribute"
+            attribute: "InvoiceAmount"
+          - name: "is_successful"
+            type: "Boolean"
+            distribution: "uniform"
+        activity_qualifiers:
+          - name: "Payment Processed"
+            to_activity: "Payment Processed"

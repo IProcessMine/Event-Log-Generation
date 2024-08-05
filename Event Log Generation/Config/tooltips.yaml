@@ -1,0 +1,18 @@
+activity_tooltips:
+    min_weight: 'Minimum weight for activities.,'
+    max_weight: 'Maximum weight for activities.,'
+    duration_uom: 'Unit of measure for activity duration.,'
+    transaction_duration_uom: 'Unit of measure for transaction duration.,'
+
+attribute_tooltips:
+    distribution: 'Distribution type for attributes.,'
+    adjustment_type: 'Type of adjustment for attributes.,'
+    generation_level: 'Level of generation for attributes.'
+
+object_type_tooltips:
+    range: 'Range for object types.,'
+
+trace_generation_tooltips:
+    trace_id_prefix: 'Prefix for trace ID.,'
+    trace_id_start: 'Starting number for trace IDs.,'
+    trace_id_step: 'Step increment for trace IDs.'

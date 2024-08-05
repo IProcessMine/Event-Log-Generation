@@ -1,0 +1,23 @@
+    <form method="post" action="{{ url_for('main.initialize_config') }}">
+    <div class="form-group">
+        <label for="defaultsFile">Defaults File</label>
+        <select class="form-control" id="defaultsFile" name="defaults_file">
+            {% for config in configs if config.type == 'defaults' %}
+                <option value="{{ config.filename }}">{{ config.filename }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="settingsFile">Settings File</label>
+        <select class="form-control" id="settingsFile" name="settings_file">
+            {% for config in configs if config.type == 'settings' %}
+                <option value="{{ config.filename }}">{{ config.filename }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="resultFilename">Result Filename</label>
+        <input type="text" class="form-control" id="resultFilename" name="result_filename">
+    </div>
+    <button type="submit" class="btn btn-primary">Initialize Configuration</button>
+    </form>

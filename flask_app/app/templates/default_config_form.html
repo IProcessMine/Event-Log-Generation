@@ -1,0 +1,25 @@
+<form method="POST" action="{{ url_for('main.defaults_config_form') }}">
+        {{ form.hidden_tag() }}
+
+        {% for field in form if field.widget.input_type != 'hidden'%}
+            <div class="mb-3">
+                <label for="{{ field.id }}" class="form-label">{{ field.label.text }}
+                    <span class="text-muted" data-bs-toggle="tooltip" title="{{ tooltips['tooltips'][field.id] }}">
+                        <i class="bi bi-info-circle"></i>
+                    </span>
+                </label>
+                {{ field(class="form-control", id=field.id) }}
+                {% if field.errors %}
+                    <div class="alert alert-danger">
+                        {% for error in field.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+    </form>
+
+

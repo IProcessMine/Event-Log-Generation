@@ -1,0 +1,45 @@
+tooltips:
+  process_id_start: "Starting ID for process. Must be a positive integer."
+  case_id_start: "Starting ID for cases. Must be a positive integer."
+  attribute_definition_id_start: "Starting ID for attribute definitions. Must be a positive integer."
+  case_attribute_id_start: "Starting ID for case attributes. Must be a positive integer."
+  activity_id_start: "Starting ID for activities. Must be a positive integer."
+  activity_instance_id_start: "Starting ID for activity instances. Must be a positive integer."
+  event_id_start: "Starting ID for events. Must be a positive integer."
+  event_attribute_id_start: "Starting ID for event attributes. Must be a positive integer."
+  object_id: "ID for the object. Must be a positive integer."
+  object_type_id: "ID for the object type. Must be a positive integer."
+  additional_trace_patterns_range_min: "Minimum additional trace patterns. Must be a positive integer."
+  additional_trace_patterns_range_max: "Maximum additional trace patterns. Must be a positive integer."
+  replays_range_min: "Minimum number of replays. Must be a positive integer."
+  replays_range_max: "Maximum number of replays. Must be a positive integer."
+  traces_in_pattern_range_min: "Minimum number of traces in a pattern. Must be a positive integer."
+  traces_in_pattern_range_max: "Maximum number of traces in a pattern. Must be a positive integer."
+  num_cases: "Total number of cases. Must be a positive integer."
+  min_weight: "Minimum weight. Must be a positive integer."
+  max_weight: "Maximum weight. Must be a positive integer."
+  duration_range_min: "Minimum duration. Must be a positive integer."
+  duration_range_max: "Maximum duration. Must be a positive integer."
+  duration_uom: "Unit of measure for duration. Choose from seconds, minutes, or hours."
+  transaction_types: "Types of transactions. Choose multiple types."
+  transaction_duration_range_min: "Minimum transaction duration. Must be a positive integer."
+  transaction_duration_range_max: "Maximum transaction duration. Must be a positive integer."
+  transaction_duration_uom: "Unit of measure for transaction duration. Choose from seconds, minutes, or hours."
+  attribute_range_min: "Minimum attribute value. Must be a non-negative integer."
+  attribute_range_max: "Maximum attribute value. Must be a non-negative integer."
+  distribution: "Distribution type. Choose from uniform or normal."
+  adjustment_type: "Type of adjustment. Must be a string."
+  generation_level: "Level of generation. Must be a string."
+  object_range_min: "Minimum object range. Must be a positive integer."
+  object_range_max: "Maximum object range. Must be a positive integer."
+  process_name: 'The name of the process.'
+  process_description': 'A description of the process.'
+  process_id: 'The unique identifier for the process.'
+  case_id: 'The unique identifier for the case.'
+  start_date: 'The start date of the process.'
+  end_date: 'The end date of the process.'
+  traces: 'A list of traces for the process.'
+  case_attributes: 'Attributes related to the case.'
+  activities: 'Activities within the process.'
+  event_attributes: 'Attributes related to events.'
+  object_types: 'Types of objects associated with the process.'

@@ -1,0 +1,38 @@
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Filename</th>
+            <th>Created</th>
+            <th>Type</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for config in configs %}
+            <tr>
+                <td>{{ config.filename }}</td>
+                <td>{{ config.created }}</td>
+                <td>{{ config.type }}</td>
+                <td>
+                    <a href="{{ url_for('main.download_config', filename=config.filename) }}" class="btn btn-success btn-sm">Download</a>
+                    <button class="btn btn-danger btn-sm" hx-get="{{ url_for('main.confirm_delete', filename=config.filename) }}" hx-trigger="click" hx-target="#deleteConfirmModal .modal-body" hx-swap="innerHTML" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal">Delete</button>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Modal -->
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteConfirmModalLabel">Confirm Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Content loaded via HTMX -->
+            </div>
+        </div>
+    </div>
+</div>

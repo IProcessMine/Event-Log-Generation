@@ -1,0 +1,385 @@
+processes:
+  process_1:
+    process_name: "Order Fulfillment"
+    process_id: 1
+    num_cases: 100
+    traces: ["(a,b,c,d,e,f)^6","(a,b,c,c,d,d,d,d,e,f)^2", "(a,b,c,d,f,e)^3", "(a,b,b,b,b)^6"]
+    start_date: "2023-01-01"
+    end_date: "2023-12-31"
+    working_days: ['workdays']
+    working_hours: [8,20]
+    case_attributes:
+      - name: "CustomerType"
+        type: "Categorical"
+        categories: ["Regular", "VIP"]
+        distribution: "uniform"
+      - name: "OrderValue"
+        type: "Numeric"
+        distribution: "normal"
+        range: [100,10000]
+        generation_level: "process"
+    event_attributes:
+      - name: "Location"
+        type: "Character"
+        distribution: "uniform"
+      - name: "Duration"
+        type: "Numeric"
+        distribution: "pareto"
+        range: [1,100]
+    activities:
+      - name: "Receive Order"
+        trace: "a"
+        min_weight: 1
+        max_weight: 2
+        distribution: "uniform"
+        order: 1
+        working_days: ['Monday']
+        working_hours: [10,18]
+        transaction_types:
+          - name: "schedule"
+            order: 1
+          - name: "start"
+            order: 2
+          - name: "assign"
+            order: 3
+          - name: "reassign"
+            order: 4
+          - name: "suspend"
+            order: 5
+          - name: "resume"
+            working_days: [ 'Monday' ]
+            working_hours: [ 14,16 ]
+            order: 6
+          - name: "complete"
+            order: 7
+        activity_attributes:
+          - name: "Priority"
+            type: "Categorical"
+            categories: ["Low", "Medium", "High"]
+            distribution: "uniform"
+          - name: "ProcessingTime"
+            type: "Numeric"
+            distribution: "normal"
+            range: [1,10]
+          - name: "Worker"
+            type: "Resource"
+            resource_type: "human"
+            distribution: "normal"
+            range: [1,24]
+      - name: "Prepare Order"
+        min_weight: 2
+        max_weight: 3
+        distribution: "normal"
+        trace: "b"
+        order: 2
+        transaction_types:
+          - name: "schedule"
+            order: 1
+          - name: "start"
+            order: 2
+          - name: "assign"
+            order: 3
+          - name: "reassign"
+            order: 4
+          - name: "suspend"
+            order: 5
+          - name: "resume"
+            order: 6
+          - name: "complete"
+            order: 7
+      - name: "Ship Order"
+        min_weight: 1
+        max_weight: 1
+        distribution: "uniform"
+        trace: "c"
+        order: 3
+        transaction_types:
+          - name: "start"
+            order: 1
+          - name: "complete"
+            order: 2
+      - name: "Deliver Order"
+        min_weight: 1
+        max_weight: 2
+        distribution: "pareto"
+        trace: "d"
+        order: 4
+        transaction_types:
+          - name: "start"
+            order: 1
+          - name: "complete"
+            order: 2
+      - name: "Confirm Delivery"
+        min_weight: 1
+        max_weight: 1
+        distribution: "uniform"
+        trace: "e"
+        order: 5
+        transaction_types:
+          - name: "start"
+            order: 1
+          - name: "complete"
+            order: 2
+  process_2:
+    process_name: "Customer Support"
+    num_cases: 50
+    num_events: 100
+    start_date: "2023-01-01"
+    end_date: "2023-12-31"
+    case_id: 51
+    activity_id: 6
+    activity_instance_id: 101
+    event_id: 201
+    case_attribute_id: 101
+    event_attribute_id: 201
+    case_attributes:
+      - name: "IssueType"
+        type: "Categorical"
+        categories: ["Technical", "Billing", "General"]
+        distribution: "uniform"
+        attribute_id: 101
+      - name: "Priority"
+        type: "Numeric"
+        distribution: "normal"
+        range: [1, 5]
+    event_attributes:
+      - name: "ResolutionTime"
+        type: "Numeric"
+        distribution: "pareto"
+        attribute_id: 10
+        range: [1, 48]
+      - name: "FeedbackScore"
+        type: "Numeric"
+        distribution: "uniform"
+        range: [1, 10]
+    activities:
+      - name: "Log Issue"
+        min_weight: 1
+        max_weight: 1
+        distribution: "uniform"
+        order: 1
+        transaction_types:
+          - name: "start"
+            order: 2
+          - name: "complete"
+            order: 7
+      - name: "Assign Agent"
+        min_weight: 1
+        max_weight: 2
+        distribution: "uniform"
+        order: 2
+        transaction_types:
+          - name: "schedule"
+            order: 1
+          - name: "start"
+            order: 2
+          - name: "assign"
+            order: 3
+          - name: "reassign"
+            order: 4
+          - name: "complete"
+            order: 5
+      - name: "Investigate Issue"
+        min_weight: 2
+        max_weight: 3
+        distribution: "normal"
+        order: 3
+        transaction_types:
+          - name: "start"
+            order: 2
+          - name: "complete"
+            order: 7
+      - name: "Resolve Issue"
+        min_weight: 1
+        max_weight: 1
+        distribution: "uniform"
+        order: 4
+        transaction_types:
+          - name: "start"
+            order: 2
+          - name: "complete"
+            order: 7
+      - name: "Close Ticket"
+        min_weight: 1
+        max_weight: 1
+        distribution: "uniform"
+        order: 5
+        transaction_types:
+          - name: "start"
+            order: 2
+          - name: "complete"
+            order: 7
+        activity_attributes:
+          - name: "SatisfactionLevel"
+            type: "Categorical"
+            attribute_id: 105
+            categories: ["Low", "Medium", "High"]
+            distribution: "uniform"
+          - name: "ResolutionTime"
+            type: "Numeric"
+            distribution: "normal"
+            range: [1, 48]
+  process_3:
+    process_name: "Procurement to Pay"
+    process_description: "Procurement process involving orders and invoices"
+    start_date: "2024-01-01"
+    end_date: "2024-07-01"
+    num_cases: 100
+    traces: []
+    case_attributes:
+      - name: "CustomerType"
+        type: "Categorical"
+        categories: [ "Regular", "VIP" ]
+        distribution: "uniform"
+      - name: "Company"
+        type: "Company"
+        distribution: "normal"
+        generation_level: "process"
+    activities:
+      - name: "Purchase Requisition Created"
+        trace: "a"
+        order: 1
+        min_weight: 1
+        max_weight: 2
+        distribution: "uniform"
+        transaction_types:
+          - name: "start"
+            order: 2
+          - name: "complete"
+            order: 7
+        activity_attributes:
+          - name: "Priority"
+            type: "Categorical"
+            categories: [ "Low", "Medium", "High" ]
+            distribution: "uniform"
+          - name: "ProcessingTime"
+            type: "Numeric"
+            distribution: "normal"
+            range: [1,24]
+          - name: "Created_by"
+            type: "Resource"
+            resource_type: "human"
+            distribution: "normal"
+            range: [1,24]
+      - name: "Purchase Requisition Approved"
+        trace: "b"
+        order: 2
+        min_weight: 1
+        max_weight: 2
+        distribution: "uniform"
+        transaction_types:
+          - name: "start"
+            order: 2
+          - name: "complete"
+            order: 7
+        activity_attributes:
+          - name: "Approved_by"
+            type: "Resource"
+            resource_type: "human"
+            distribution: "normal"
+            range: [1,4]
+      - name: "Purchase Order Created"
+        trace: "c"
+        order: 3
+        min_weight: 1
+        max_weight: 2
+        distribution: "uniform"
+        transaction_types:
+          - name: "start"
+            order: 2
+          - name: "complete"
+            order: 7
+      - name: "Purchase Order Updated"
+        trace: "d"
+        order: 4
+        min_weight: 1
+        max_weight: 2
+        distribution: "uniform"
+        transaction_types:
+          - name: "start"
+            order: 2
+          - name: "complete"
+            order: 7
+      - name: "Invoice Received"
+        trace: "e"
+        order: 6
+        min_weight: 1
+        max_weight: 4
+        distribution: "normal"
+      - name: "Payment Processed"
+        trace: "f"
+        order: 5
+        min_weight: 1
+        max_weight: 5
+        distribution: "normal"
+    event_attributes:
+      - name: "Location"
+        type: "Character"
+        distribution: "uniform"
+        generation_level: "event"
+      - name: "Duration"
+        type: "Numeric"
+        distribution: "pareto"
+        range: [1,100]
+        generation_level: "case"
+        adjustment_type: "slight_change"
+    object_types:
+      - name: "Purchase Requisition"
+        range: [1,4]
+        object_attributes:
+          - name: "pr product"
+            type: "Categorical"
+            categories: [ "Laptop", "Monitor", "Keyboard" ]
+          - name: "pr quantity"
+            type: "Numeric"
+            distribution: "pareto"
+            range: [1,10]
+        activity_qualifiers:
+          - name: "PR Created"
+            to_activity: "Purchase Requisition Created"
+          - name: "PR Approved"
+            to_activity: "Purchase Requisition Approved"
+        object_qualifiers:
+          - name: "converted to"
+            to_object: "Purchase Order"
+      - name: "Purchase Order"
+        range: [1,4]
+        object_attributes:
+          - name: "po product"
+            type: "Categorical"
+            categories: [ "Laptop", "Monitor", "Keyboard" ]
+            distribution: "attribute"
+            attribute: "pr product"
+          - name: "po quantity"
+            type: "Numeric"
+            distribution: "attribute"
+            attribute: "pr product"
+        activity_qualifiers:
+          - name: "PO Created"
+            to_activity: "Purchase Order Created"
+          - name: "PO Approved"
+            to_activity: "Purchase Order Approved"
+        object_qualifiers:
+          - name: "invoiced by"
+            to_object: "Invoice"
+      - name: "Invoice"
+        range: [1,4]
+        object_attributes:
+          - name: "is_blocked"
+            type: "Boolean"
+            distribution: "uniform"
+        activity_qualifiers:
+          - name: "Invoice Received"
+            to_activity: "Invoice Received"
+        object_qualifiers:
+          - name: "paid by"
+            to_object: "Payment"
+      - name: "Payment"
+        range: [1,4]
+        object_attributes:
+          - name: "is_blocked"
+            type: "Boolean"
+            distribution: "uniform"
+        activity_qualifiers:
+          - name: "Payment Processed"
+            to_activity: "Payment Processed"
